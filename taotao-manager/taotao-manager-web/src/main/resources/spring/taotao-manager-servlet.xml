@@ -11,7 +11,7 @@
 	<mvc:annotation-driven/>
 	
 	<!-- 定义Controller的扫描包 -->
-	<context:component-scan base-package="com.taotao.*"/>
+	<context:component-scan base-package="com.taotao.manager.controller"/>
 
 	<!-- 定义试图解析器 -->
 	<!-- 
