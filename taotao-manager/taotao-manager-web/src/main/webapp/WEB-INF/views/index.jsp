@@ -1,73 +1,65 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		 xmlns="http://java.sun.com/xml/ns/javaee"
-		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-		 id="WebApp_ID" version="2.5">
-	<display-name>taotao-manage</display-name>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>淘淘商城后台管理系统</title>
+	<jsp:include page="/commons/common-js.jsp"></jsp:include>
+	<style type="text/css">
+		.content {
+			padding: 10px 10px 10px 10px;
+		}
+	</style>
+</head>
+<body class="easyui-layout">
+<div data-options="region:'west',title:'菜单',split:true" style="width:180px;">
+	<ul id="menu" class="easyui-tree" style="margin-top: 10px;margin-left: 5px;">
+		<li>
+			<span>商品管理</span>
+			<ul>
+				<li data-options="attributes:{'url':'/rest/page/item-add'}">新增商品</li>
+				<li data-options="attributes:{'url':'/rest/page/item-list'}">查询商品</li>
+				<li data-options="attributes:{'url':'/rest/page/item-param-list'}">规格参数</li>
+			</ul>
+		</li>
+		<li>
+			<span>网站内容管理</span>
+			<ul>
+				<li data-options="attributes:{'url':'/rest/page/content-category'}">内容分类管理</li>
+				<li data-options="attributes:{'url':'/rest/page/content'}">内容管理</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+<div data-options="region:'center',title:''">
+	<div id="tabs" class="easyui-tabs">
+		<div title="首页" style="padding:20px;">
 
-	<context-param>
-		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:spring/applicationContext*.xml</param-value>
-	</context-param>
+		</div>
+	</div>
+</div>
 
-	<!--Spring的ApplicationContext 载入 -->
-	<listener>
-		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-
-	<!-- 编码过滤器，以UTF8编码 -->
-	<filter>
-		<filter-name>encodingFilter</filter-name>
-		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
-		<init-param>
-			<param-name>encoding</param-name>
-			<param-value>UTF8</param-value>
-		</init-param>
-	</filter>
-	<filter-mapping>
-		<filter-name>encodingFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
-	<!-- 解决PUT请求无法提交表单数据的问题 -->
-	<filter>
-		<filter-name>HttpMethodFilter</filter-name>
-		<filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>HttpMethodFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
-	<!-- 将POST请求转化为DELETE或者是PUT 要用_method指定真正的请求参数 -->
-	<filter>
-		<filter-name>HiddenHttpMethodFilter</filter-name>
-		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>HiddenHttpMethodFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
-
-
-	<!-- 配置SpringMVC框架入口 -->
-	<servlet>
-		<servlet-name>taotao-manage</servlet-name>
-		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-		<init-param>
-			<param-name>contextConfigLocation</param-name>
-			<param-value>classpath:spring/taotao-manager-servlet.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>taotao-manage</servlet-name>
-		<url-pattern>/rest/*</url-pattern>
-	</servlet-mapping>
-
-	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
-	</welcome-file-list>
-
-</web-app>
+<script type="text/javascript">
+    $(function(){
+        $('#menu').tree({
+            onClick: function(node){
+                if($('#menu').tree("isLeaf",node.target)){//判断点击的节点是否是叶子节点
+                    var tabs = $("#tabs");
+                    var tab = tabs.tabs("getTab",node.text);
+                    if(tab){
+                        tabs.tabs("select",node.text);
+                    }else{
+                        tabs.tabs('add',{
+                            title:node.text,
+                            href: node.attributes.url,
+                            closable:true,
+                            bodyCls:"content"
+                        });
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
