@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RequestMapping("item")
 @Controller
+//@Slog4j，下面的private static final Logger LOGGER = LoggerFactory.getLogger(ItemController.class);可以省略直接用log.err,log.info方法输入日志
+// 就行用了一个插件lombok插件该插件可以用于对象的set,get方法的简写
 public class ItemController {
     private static final Logger LOGGER = LoggerFactory.getLogger(ItemController.class);
     @Autowired
