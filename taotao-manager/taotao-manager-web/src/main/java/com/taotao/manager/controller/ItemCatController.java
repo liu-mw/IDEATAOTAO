@@ -22,11 +22,14 @@ public class ItemCatController {
     public ResponseEntity<List<ItemCat>> queryItemListByParentId(
             @RequestParam(value="id",defaultValue="0") Long pid){
         try {
-            List<ItemCat> list = this.itemCatService.queryItemCatListByParentId(pid);
-            if(null==list||list.isEmpty()){
+//            List<ItemCat> list = this.itemCatService.queryItemCatListByParentId(pid);
+            ItemCat record = new ItemCat();
+            record.setParentId(pid);
+            List<ItemCat> itemCats = this.itemCatService.queryListByWhere(record);
+            if(null==itemCats||itemCats.isEmpty()){
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
             }
-            return ResponseEntity.ok(list);
+            return ResponseEntity.ok(itemCats);
         } catch (Exception e) {
             e.printStackTrace();
         }

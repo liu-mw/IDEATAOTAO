@@ -22,9 +22,9 @@ Date.prototype.format = function(format){
 var TT = TAOTAO = {
 	// 编辑器参数
 	kingEditorParams : {
-		filePostName  : "uploadFile",
-		uploadJson : '/rest/pic/upload',
-		dir : "image"
+		filePostName  : "uploadFile",//表单提交中file组件的input名称
+		uploadJson : '/rest/pic/upload',//上传地址
+		dir : "image"//类型
 	},
 	// 格式化时间
 	formatDateTime : function(val,row){
@@ -75,12 +75,14 @@ var TT = TAOTAO = {
         			}
         		}
         	}
-        	$(e).click(function(){
+        	$(e).unbind('click').click(function(){
+        		//从按钮开始向上查找form，查找最近的一个form对象
         		var form = $(this).parentsUntil("form").parent("form");
+        		//图片上传
         		KindEditor.editor(TT.kingEditorParams).loadPlugin('multiimage',function(){
         			var editor = this;
         			editor.plugin.multiImageDialog({
-						clickFn : function(urlList) {
+						clickFn : function(urlList) {//点击“全部插入”时执行
 							var imgArray = [];
 							KindEditor.each(urlList, function(i, data) {
 								imgArray.push(data.url);
