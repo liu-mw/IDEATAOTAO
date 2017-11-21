@@ -185,8 +185,40 @@ var TT = TAOTAO = {
     	$(".panel-tool-close").click();
     },
     
-    changeItemParam : function(node,formId){
-    	$.getJSON("/rest/item/param/query/itemcatid/" + node.id,function(data){
+    changeItemParam : function(node,formId){//该方法用于把模板数据给展现出来
+        $.ajax({
+            type: "GET",
+            url: "/rest/item/param/" + node.id,
+			statusCode:{
+				200:function(data){
+                    $("#"+formId+" .params").show();
+                    var paramData = JSON.parse(data.paramData);
+                    var html = "<ul>";
+                    for(var i in paramData){
+                        var pd = paramData[i];
+                        html+="<li><table>";
+                        html+="<tr><td colspan=\"2\" class=\"group\">"+pd.group+"</td></tr>";
+
+                        for(var j in pd.params){
+                            var ps = pd.params[j];
+                            html+="<tr><td class=\"param\"><span>"+ps+"</span>: </td><td><input autocomplete=\"off\" type=\"text\"/></td></tr>";
+                        }
+
+                        html+="</li></table>";
+                    }
+                    html+= "</ul>";
+                    $("#"+formId+" .params td").eq(1).html(html);
+				},
+				404:function(){
+                    $("#"+formId+" .params").hide();
+                    $("#"+formId+" .params td").eq(1).empty();
+				},
+				500:function(){
+					alert("error");
+				}
+			}
+		});
+    	/*$.getJSON("/rest/item/param/query/itemcatid/" + node.id,function(data){
 			  if(data.status == 200 && data.data){
 				 $("#"+formId+" .params").show();
 				 var paramData = JSON.parse(data.data.paramData);
@@ -209,7 +241,7 @@ var TT = TAOTAO = {
 				 $("#"+formId+" .params").hide();
 				 $("#"+formId+" .params td").eq(1).empty();
 			  }
-		  });
+		  });*/
     },
     getSelectionsIds : function (select){
     	var list = $(select);

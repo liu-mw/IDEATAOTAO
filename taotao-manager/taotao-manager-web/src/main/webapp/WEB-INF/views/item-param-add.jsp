@@ -3,7 +3,7 @@
 <table cellpadding="5" style="margin-left: 30px" id="itemParamAddTable" class="itemParam">
 	<tr>
 		<td>商品类目:</td>
-		<td><a href="javascript:void(0)" class="easyui-linkbutton selectItemCat">选择类目</a> 
+		<td><a href="javascript:void(0)" class="easyui-linkbutton selectItemCat">选择类目</a>
 			<input type="hidden" name="cid" style="width: 280px;"></input>
 		</td>
 	</tr>
@@ -30,12 +30,13 @@
 				<input class="easyui-textbox" style="width: 150px;" name="group"/>&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton addParam"  title="添加参数" data-options="plain:true,iconCls:'icon-add'"></a>
 			</li>
 			<li>
-				<span>|-------</span><input  style="width: 150px;" class="easyui-textbox" name="param"/>&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton delParam" title="删除" data-options="plain:true,iconCls:'icon-cancel'"></a>						
+				<span>|-------</span><input  style="width: 150px;" class="easyui-textbox" name="param"/>&nbsp;<a href="javascript:void(0)" class="easyui-linkbutton delParam" title="删除" data-options="plain:true,iconCls:'icon-cancel'"></a>
 			</li>
 		</ul>
 	</li>
 </div>
-<script style="text/javascript">
+<%--<script style="text/javascript">--%>
+<script>
 	$(function(){
 		TAOTAO.initItemCat({
 			fun:function(node){
@@ -50,11 +51,24 @@
 				  }
 				  $(".addGroupTr").show();
 			  }); */
-				
+
 			  $.ajax({
 				   type: "GET",
 				   url: "/rest/item/param/" + node.id,
-				   success: function(data){
+					statusCode:{
+						200:function(){
+                            $.messager.alert("提示", "该类目已经添加，请选择其他类目。", undefined, function(){
+                            $("#itemParamAddTable .selectItemCat").click();
+                            });
+						},
+                        404:function(){
+                            $(".addGroupTr").show();
+                        },
+                        500:function(){
+                            alert("error");
+                        }
+					}
+				   <%--success: function(data){
 					   if(data){
 						  $.messager.alert("提示", "该类目已经添加，请选择其他类目。", undefined, function(){
 							 $("#itemParamAddTable .selectItemCat").click();
@@ -65,11 +79,11 @@
 				   },
 				   error: function(){
 					   alert("error");
-				   }
+				   }--%>
 				});
 			}
 		});
-		
+
 		$(".addGroup").click(function(){
 			  var temple = $(".itemParamAddTemplate li").eq(0).clone();
 			  $(this).parent().parent().append(temple);
@@ -84,11 +98,11 @@
 				  $(this).parent().remove();
 			  });
 		 });
-		
+
 		$("#itemParamAddTable .close").click(function(){
 			$(".panel-tool-close").click();
 		});
-		
+
 		$("#itemParamAddTable .submit").click(function(){
 			var params = [];
 			var groups = $("#itemParamAddTable [name=group]");
@@ -98,7 +112,7 @@
 				p.each(function(_i,_e){
 					var _val = $(_e).siblings("input").val();
 					if($.trim(_val).length>0){
-						_ps.push(_val);						
+						_ps.push(_val);
 					}
 				});
 				var _val = $(e).siblings("input").val();
@@ -106,7 +120,7 @@
 					params.push({
 						"group":_val,
 						"params":_ps
-					});					
+					});
 				}
 			});
 			var url = "/rest/item/param/"+$("#itemParamAddTable [name=cid]").val();
