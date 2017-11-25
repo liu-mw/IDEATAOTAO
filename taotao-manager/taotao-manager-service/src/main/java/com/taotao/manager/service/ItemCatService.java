@@ -1,10 +1,12 @@
 package com.taotao.manager.service;
 
-import com.github.abel533.mapper.Mapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taotao.common.bean.ItemCatData;
 import com.taotao.common.bean.ItemCatResult;
-import com.taotao.manager.mapper.ItemCatMapper;
+import com.taotao.common.service.RedisServiceOptimize;
 import com.taotao.manager.pojo.ItemCat;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +31,30 @@ public class ItemCatService extends BaseService<ItemCat>{
         record.setParentId(pid);
         return itemCatMapper.select(record);
     }*/
+    @Autowired
+    private RedisServiceOptimize redisServiceOptimize;
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final String REDIS_KEY = "TAOTAO_MANAGER_ITEM_CAT_ALL";
+    private static final Integer REDIS_TIME= 60 * 60 * 24 * 30 * 3;
     /**
      * 全部查询，并且生成树状结构
      *
      * @return
      */
     public ItemCatResult queryAllToTree() {
+        //try-catch这样写为了不影响原有逻辑，即使报错也执行原有逻辑
+        try {
+            //从缓存中命中
+            //String key = "TAOTAO_MANAGER_ITEM_CAT_ALL";//定义key的规则：项目名_模块名__业务名
+            String cacheData = this.redisServiceOptimize.get(REDIS_KEY);
+            if(StringUtils.isNoneEmpty(cacheData)){
+                    //把String类型反序列话成对象
+                    return MAPPER.readValue(cacheData,ItemCatResult.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         ItemCatResult result = new ItemCatResult();
         // 全部查出，并且在内存中生成树形结构
         List<ItemCat> cats = super.queryAll();
@@ -81,6 +101,12 @@ public class ItemCatService extends BaseService<ItemCat>{
             if (result.getItemCats().size() >= 14) {
                 break;
             }
+        }
+
+        try {
+            this.redisServiceOptimize.set(REDIS_KEY,MAPPER.writeValueAsString(result),REDIS_TIME);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
         return result;
     }

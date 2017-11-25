@@ -6,25 +6,21 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
-
-	<!-- 使用spring自带的占位符替换功能 -->
-	<bean
-		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-		<!-- 允许JVM参数覆盖 -->
-		<property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE" />
-		<!-- 忽略没有找到的资源文件 -->
-		<property name="ignoreResourceNotFound" value="true" />
-		<!-- 配置资源文件 -->
-		<property name="locations">
-			<list>
-				<value>classpath:env.properties</value>
-				<value>classpath:httpClient.properties</value>
-				<value>classpath:redis.properties</value>
-			</list>
-		</property>
+	<!--连接池配置-->
+	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<!--最大连接数-->
+		<property name="maxTotal" value="${redis.maxTotal}"/>
 	</bean>
-	
-	<!-- 扫描包 -->
-	<context:component-scan base-package="com.taotao"/>
-
+	<!--分片连接池-->
+	<bean class="redis.clients.jedis.ShardedJedisPool">
+		<constructor-arg index="0" ref="jedisPoolConfig"/>
+		<constructor-arg index="1">
+			<list>
+				<bean class="redis.clients.jedis.JedisShardInfo">
+					<constructor-arg index="0" value="${redis.node1.ip}"/>
+					<constructor-arg index="1" value="${redis.node1.port}"/>
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
 </beans>
