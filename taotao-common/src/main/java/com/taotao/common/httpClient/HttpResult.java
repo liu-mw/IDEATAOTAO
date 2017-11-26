@@ -1,4 +1,4 @@
-package com.taotao.web.httpClient;
+package com.taotao.common.httpClient;
 
 /**
  * @author liu_mw

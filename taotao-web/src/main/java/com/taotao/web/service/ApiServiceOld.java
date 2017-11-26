@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.taotao.web.httpClient.HttpResult;
+import com.taotao.common.httpClient.HttpResult;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
@@ -31,7 +31,7 @@ import org.springframework.stereotype.Service;
  * @date 2017/11/23 21:36
  */
 @Service
-public class ApiService implements BeanFactoryAware{
+public class ApiServiceOld implements BeanFactoryAware{
     //该方法不能保证httpclient在单列apiService下实现多列,用下面的beanFactory实现单列中用多列
     /*@Autowired
     private CloseableHttpClient httpClient;*/

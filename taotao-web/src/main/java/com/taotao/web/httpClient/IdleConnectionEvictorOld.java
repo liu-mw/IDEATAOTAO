@@ -7,13 +7,13 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
  * @author liu_mw
  * @date 2017/11/23 21:30
  */
-public class IdleConnectionEvictor extends Thread {
+public class IdleConnectionEvictorOld extends Thread {
 
     private final HttpClientConnectionManager connMgr;
 
     private volatile boolean shutdown;
 
-    public IdleConnectionEvictor(HttpClientConnectionManager connMgr) {
+    public IdleConnectionEvictorOld(HttpClientConnectionManager connMgr) {
         this.connMgr = connMgr;
     }
 
