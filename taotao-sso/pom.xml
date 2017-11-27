@@ -101,6 +101,18 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-io</artifactId>
         </dependency>
+        <!--用于加密的-->
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
+        </dependency>
+        <!--springmvc层的数据校验-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>5.1.3.Final</version>
+        </dependency>
     </dependencies>
 
     <build>
