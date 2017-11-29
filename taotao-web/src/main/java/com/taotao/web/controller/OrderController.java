@@ -7,7 +7,9 @@ import com.taotao.web.interceptors.UserLoginHandlerInterceptor;
 import com.taotao.web.service.ItemService;
 import com.taotao.web.service.OrderService;
 import com.taotao.web.service.UserService;
+import com.taotao.web.threadlocal.UserThreadLocal;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -44,10 +46,12 @@ public class OrderController {
      */
     @RequestMapping(value="submit",method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> submit(Order order, @CookieValue(UserLoginHandlerInterceptor.COOKIE_NAME) String token){
+//    public Map<String,Object> submit(Order order, @CookieValue(UserLoginHandlerInterceptor.COOKIE_NAME) String token){第一种方案
+    public Map<String,Object> submit(Order order){
+
         Map<String,Object> result = new HashMap<String,Object>();
         //填充当前用户信息，要不然提交时候报错，格式没有对应
-        User user = this.userService.queryByToken(token);
+        User user = UserThreadLocal.get();//this.userService.queryByToken(token);防止两次查询用户
         order.setUserId(user.getId());
         order.setBuyerNick(user.getUsername());
 
@@ -60,5 +64,15 @@ public class OrderController {
             result.put("data",orderId);
         }
         return result;
+    }
+    //订单支付后跳转到成功页面
+    @RequestMapping(value="success",method = RequestMethod.GET)
+    public ModelAndView success(@RequestParam("id")String orderId){
+        ModelAndView mv = new ModelAndView("success");
+        Order order = this.orderService.queryByOrderId(orderId);
+        mv.addObject("order",order);
+        //送货时间，当前时间向后退后2天，格式：08月19日
+        mv.addObject("date",new DateTime().plusDays(2).toString("MM月dd日"));
+        return mv;
     }
 }

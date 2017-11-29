@@ -1,5 +1,7 @@
 package com.taotao.sso.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.taotao.common.service.RedisServiceOptimize;
 import com.taotao.common.utils.CookieUtils;
 import com.taotao.sso.pojo.User;
 import com.taotao.sso.service.UserService;
@@ -18,6 +20,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,10 +33,12 @@ import java.util.Map;
 @RequestMapping("user")
 @Controller
 public class UserController {
-    private static final String COOKIE_NAME = "TT_TOKEN";
+    @Autowired
+    private RedisServiceOptimize redisServiceOptimize;
     @Autowired
     private UserService userService;
 
+    private static final String COOKIE_NAME = "TT_TOKEN";
     /**
      * 注册页面
      *
@@ -70,6 +75,19 @@ public class UserController {
             e.printStackTrace();
         }
         return result;
+    }
+    @RequestMapping(value="quit",method = RequestMethod.GET)
+    public ResponseEntity<Boolean> toLogin(HttpServletRequest request, HttpServletResponse response){
+        String token = CookieUtils.getCookieValue(request,COOKIE_NAME);
+        String loginUrl = "http://sso.taotao.com/user/login.html";
+        //清除缓存中的数据
+        Long del = this.redisServiceOptimize.del("TOKEN_" + token);
+        try {
+            response.sendRedirect(loginUrl);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(true);
     }
     /**
      * 查询用户是否存在

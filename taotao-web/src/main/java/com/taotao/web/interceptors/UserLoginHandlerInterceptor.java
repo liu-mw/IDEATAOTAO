@@ -3,6 +3,7 @@ package com.taotao.web.interceptors;
 import com.taotao.common.utils.CookieUtils;
 import com.taotao.web.bean.User;
 import com.taotao.web.service.UserService;
+import com.taotao.web.threadlocal.UserThreadLocal;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,6 +24,7 @@ public class UserLoginHandlerInterceptor implements HandlerInterceptor{
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+        //UserThreadLocal.set(null);//清空上一次数据，即上一次的用户,也可以写在拦截器的after方法里
         String loginUrl = this.userService.TAOTAO_SSO_URL + "/user/login.html";
 
         String token = CookieUtils.getCookieValue(httpServletRequest,COOKIE_NAME);
@@ -37,6 +39,7 @@ public class UserLoginHandlerInterceptor implements HandlerInterceptor{
             httpServletResponse.sendRedirect(loginUrl);
             return false;
         }
+        UserThreadLocal.set(user);
         return true;
     }
 
@@ -47,6 +50,6 @@ public class UserLoginHandlerInterceptor implements HandlerInterceptor{
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
-
+        UserThreadLocal.set(null);//清空上一次数据，即上一次的用户,也可以写在拦截器的after方法里
     }
 }
