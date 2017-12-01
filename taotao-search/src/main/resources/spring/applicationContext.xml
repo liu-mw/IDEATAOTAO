@@ -19,6 +19,8 @@
 			<list>
 				<value>classpath:env.properties</value>
 				<value>classpath:solr.properties</value>
+				<value>classpath:rabbitmq.properties</value>
+				<value>classpath:httpClient.properties</value>
 			</list>
 		</property>
 	</bean>
