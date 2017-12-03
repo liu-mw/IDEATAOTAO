@@ -29,28 +29,85 @@
 	<!-- 扫描包 -->
 	<context:component-scan base-package="com.taotao"/>
 
-	 <!-- 定义数据源 -->
+	 <!--&lt;!&ndash; 定义数据源 &ndash;&gt;
 	<bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource"
 		destroy-method="close">
-		<!-- 数据库驱动 -->
+		&lt;!&ndash; 数据库驱动 &ndash;&gt;
 		<property name="driverClass" value="${jdbc.driverClassName}" />
-		<!-- 相应驱动的jdbcUrl -->
+		&lt;!&ndash; 相应驱动的jdbcUrl &ndash;&gt;
 		<property name="jdbcUrl" value="${jdbc.url}" />
-		<!-- 数据库的用户名 -->
+		&lt;!&ndash; 数据库的用户名 &ndash;&gt;
 		<property name="username" value="${jdbc.username}" />
-		<!-- 数据库的密码 -->
+		&lt;!&ndash; 数据库的密码 &ndash;&gt;
 		<property name="password" value="${jdbc.password}" />
+		&lt;!&ndash; 检查数据库连接池中空闲连接的间隔时间，单位是分，默认值：240，如果要取消则设置为0 &ndash;&gt;
+		<property name="idleConnectionTestPeriod" value="60" />
+		&lt;!&ndash; 连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 &ndash;&gt;
+		<property name="idleMaxAge" value="30" />
+		&lt;!&ndash; 每个分区最大的连接数 &ndash;&gt;
+		&lt;!&ndash;
+			判断依据：请求并发数
+		 &ndash;&gt;
+		<property name="maxConnectionsPerPartition" value="100" />
+		&lt;!&ndash; 每个分区最小的连接数 &ndash;&gt;
+		<property name="minConnectionsPerPartition" value="5" />
+	</bean>-->
+
+
+	<!-- 配置连接池 -->
+	<bean id="masterDataSource" class="com.jolbox.bonecp.BoneCPDataSource"
+		  destroy-method="close">
+		<!-- 数据库驱动 -->
+		<property name="driverClass" value="${jdbc.master.driver}" />
+		<!-- 相应驱动的jdbcUrl -->
+		<property name="jdbcUrl" value="${jdbc.master.url}" />
+		<!-- 数据库的用户名 -->
+		<property name="username" value="${jdbc.master.username}" />
+		<!-- 数据库的密码 -->
+		<property name="password" value="${jdbc.master.password}" />
 		<!-- 检查数据库连接池中空闲连接的间隔时间，单位是分，默认值：240，如果要取消则设置为0 -->
 		<property name="idleConnectionTestPeriod" value="60" />
 		<!-- 连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 -->
 		<property name="idleMaxAge" value="30" />
 		<!-- 每个分区最大的连接数 -->
-		<!-- 
-			判断依据：请求并发数
-		 -->
-		<property name="maxConnectionsPerPartition" value="100" />
+		<property name="maxConnectionsPerPartition" value="150" />
 		<!-- 每个分区最小的连接数 -->
 		<property name="minConnectionsPerPartition" value="5" />
+	</bean>
+
+	<!-- 配置连接池 -->
+	<bean id="slave01DataSource" class="com.jolbox.bonecp.BoneCPDataSource"
+		  destroy-method="close">
+		<!-- 数据库驱动 -->
+		<property name="driverClass" value="${jdbc.slave01.driver}" />
+		<!-- 相应驱动的jdbcUrl -->
+		<property name="jdbcUrl" value="${jdbc.slave01.url}" />
+		<!-- 数据库的用户名 -->
+		<property name="username" value="${jdbc.slave01.username}" />
+		<!-- 数据库的密码 -->
+		<property name="password" value="${jdbc.slave01.password}" />
+		<!-- 检查数据库连接池中空闲连接的间隔时间，单位是分，默认值：240，如果要取消则设置为0 -->
+		<property name="idleConnectionTestPeriod" value="60" />
+		<!-- 连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 -->
+		<property name="idleMaxAge" value="30" />
+		<!-- 每个分区最大的连接数 -->
+		<property name="maxConnectionsPerPartition" value="150" />
+		<!-- 每个分区最小的连接数 -->
+		<property name="minConnectionsPerPartition" value="5" />
+	</bean>
+
+	<!-- 定义数据源，使用自己实现的数据源 -->
+	<bean id="dataSource" class="com.taotao.manager.datasource.DynamicDataSource">
+		<!-- 设置多个数据源 -->
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<!-- 这个key需要和程序中的key一致 -->
+				<entry key="master" value-ref="masterDataSource"/>
+				<entry key="slave" value-ref="slave01DataSource"/>
+			</map>
+		</property>
+		<!-- 设置默认的数据源，这里默认走写库 -->
+		<property name="defaultTargetDataSource" ref="masterDataSource"/>
 	</bean>
 
 </beans>
