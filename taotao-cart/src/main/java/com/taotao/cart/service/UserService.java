@@ -1,8 +1,10 @@
 package com.taotao.cart.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taotao.cart.bean.User;
+//import com.taotao.cart.bean.User;
 import com.taotao.common.service.ApiService;
+import com.taotao.sso.query.api.UserQueryService;
+import com.taotao.sso.query.bean.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +18,8 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     @Autowired
+    private UserQueryService userQueryService;
+    @Autowired
     private ApiService apiService;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -26,7 +30,7 @@ public class UserService {
      * @param token
      * @return
      */
-    public User queryByToken(String token){
+    /*public User queryByToken(String token){
         try {
             String url =  TAOTAO_SSO_URL + "/service/user/" + token;
             String jsonData = this.apiService.doGet(url);
@@ -37,5 +41,14 @@ public class UserService {
             e.printStackTrace();
         }
         return null;
+    }*/
+
+    /**
+     * 改用dubbo调用
+     * @param token
+     * @return
+     */
+    public User queryByToken(String token){
+        return this.userQueryService.queryUserByToken(token);
     }
 }

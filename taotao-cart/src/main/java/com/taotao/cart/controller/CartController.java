@@ -1,10 +1,11 @@
 package com.taotao.cart.controller;
 
-import com.taotao.cart.bean.User;
+//import com.taotao.cart.bean.User;
 import com.taotao.cart.pojo.Cart;
 import com.taotao.cart.service.CartCookieService;
 import com.taotao.cart.service.CartService;
 import com.taotao.cart.threadlocal.UserThreadLocal;
+import com.taotao.sso.query.bean.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

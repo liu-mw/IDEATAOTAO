@@ -2,8 +2,9 @@ package com.taotao.web.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taotao.common.service.ApiService;
+import com.taotao.sso.query.bean.User;
 import com.taotao.web.bean.Cart;
-import com.taotao.web.bean.User;
+//import com.taotao.web.bean.User;
 import com.taotao.web.threadlocal.UserThreadLocal;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

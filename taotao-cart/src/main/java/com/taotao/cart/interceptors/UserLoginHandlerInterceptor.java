@@ -1,9 +1,10 @@
 package com.taotao.cart.interceptors;
 
-import com.taotao.cart.bean.User;
+//import com.taotao.cart.bean.User;
 import com.taotao.cart.service.UserService;
 import com.taotao.cart.threadlocal.UserThreadLocal;
 import com.taotao.common.utils.CookieUtils;
+import com.taotao.sso.query.bean.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerInterceptor;

@@ -1,6 +1,8 @@
 package com.taotao.web.threadlocal;
 
-import com.taotao.web.bean.User;
+//import com.taotao.web.bean.User;
+
+import com.taotao.sso.query.bean.User;
 
 /**
  * @author liu_mw

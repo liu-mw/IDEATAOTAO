@@ -1,9 +1,10 @@
 package com.taotao.web.controller;
 
 import com.taotao.manager.pojo.Item;
+import com.taotao.sso.query.bean.User;
 import com.taotao.web.bean.Cart;
 import com.taotao.web.bean.Order;
-import com.taotao.web.bean.User;
+//import com.taotao.web.bean.User;
 import com.taotao.web.interceptors.UserLoginHandlerInterceptor;
 import com.taotao.web.service.CartService;
 import com.taotao.web.service.ItemService;

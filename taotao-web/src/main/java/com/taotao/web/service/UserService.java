@@ -2,7 +2,9 @@ package com.taotao.web.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taotao.common.service.ApiService;
-import com.taotao.web.bean.User;
+import com.taotao.sso.query.api.UserQueryService;
+//import com.taotao.web.bean.User;
+import com.taotao.sso.query.bean.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +18,8 @@ import java.io.IOException;
  */
 @Service
 public class UserService {
+    @Autowired
+    private UserQueryService userQueryService;
 
     @Autowired
     private ApiService apiService;
@@ -28,7 +32,7 @@ public class UserService {
      * @param token
      * @return
      */
-    public User queryByToken(String token){
+    /*public User queryByToken(String token){
         try {
             String url =  TAOTAO_SSO_URL + "/service/user/" + token;
             String jsonData = this.apiService.doGet(url);
@@ -39,5 +43,14 @@ public class UserService {
             e.printStackTrace();
         }
         return null;
+    }*/
+
+    /**
+     * 上述方法通过dubbo改造
+     * @param token
+     * @return
+     */
+    public User queryByToken(String token){
+        return this.userQueryService.queryUserByToken(token);
     }
 }

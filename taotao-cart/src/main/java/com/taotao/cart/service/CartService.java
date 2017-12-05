@@ -2,10 +2,11 @@ package com.taotao.cart.service;
 
 import com.github.abel533.entity.Example;
 import com.taotao.cart.bean.Item;
-import com.taotao.cart.bean.User;
+//import com.taotao.cart.bean.User;
 import com.taotao.cart.mapper.CartMapper;
 import com.taotao.cart.pojo.Cart;
 import com.taotao.cart.threadlocal.UserThreadLocal;
+import com.taotao.sso.query.bean.User;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

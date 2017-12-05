@@ -1,7 +1,9 @@
 package com.taotao.cart.threadlocal;
 
 
-import com.taotao.cart.bean.User;
+//import com.taotao.cart.bean.User;
+
+import com.taotao.sso.query.bean.User;
 
 /**
  * @author liu_mw

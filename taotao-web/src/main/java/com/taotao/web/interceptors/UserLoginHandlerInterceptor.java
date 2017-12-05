@@ -1,7 +1,8 @@
 package com.taotao.web.interceptors;
 
 import com.taotao.common.utils.CookieUtils;
-import com.taotao.web.bean.User;
+//import com.taotao.web.bean.User;
+import com.taotao.sso.query.bean.User;
 import com.taotao.web.service.UserService;
 import com.taotao.web.threadlocal.UserThreadLocal;
 import org.apache.commons.lang3.StringUtils;
