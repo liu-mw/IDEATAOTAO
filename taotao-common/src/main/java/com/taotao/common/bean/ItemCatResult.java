@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ItemCatResult {
 
-	@JsonProperty("data")
+	@JsonProperty("data")//指定对象序列化json时的名称
 	private List<ItemCatData> itemCats = new ArrayList<ItemCatData>();
 
 	public List<ItemCatData> getItemCats() {

@@ -14,6 +14,7 @@
 			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
 				<constructor-arg index="0" value="UTF-8"></constructor-arg>
 			</bean>-->
+			<!--在业务逻辑处理完成之后，页面展现之前执行该代码，其中可以获取到业务逻辑处理之后的数据进行处理-->
 			<bean class="com.taotao.common.spring.exetend.converter.json.CallbackMappingJackson2HttpMessageConverter">
 				<property name="callbackName" value="callback"/>
 			</bean>

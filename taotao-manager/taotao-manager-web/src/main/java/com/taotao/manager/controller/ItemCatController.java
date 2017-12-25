@@ -18,6 +18,12 @@ import java.util.List;
 public class ItemCatController {
     @Autowired
     private ItemCatService itemCatService;
+
+    /**
+     * 用于展示商品类目
+     * @param pid
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<ItemCat>> queryItemListByParentId(
             @RequestParam(value="id",defaultValue="0") Long pid){
