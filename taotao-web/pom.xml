@@ -12,6 +12,7 @@
     <name>taotao-web Maven Webapp</name>
     <url>http://maven.apache.org</url>
     <dependencies>
+
         <dependency>
             <groupId>com.taotao</groupId>
             <artifactId>taotao-manager-pojo</artifactId>
